@@ -1,0 +1,77 @@
+version: '3.7'
+services:
+    nginx:
+        build:
+            context: .
+            dockerfile: ./dockerfile_nginx
+        container_name: nginx
+        ports:
+                - 80:80
+        volumes:
+            - ./nginx/default.conf:/etc/nginx/conf.d/default.conf
+             
+    php8:
+        build:
+            context: .
+            dockerfile: ./dockerfile_php8
+        container_name: php8
+        user: "1000:33"
+        expose:
+            - "80"
+            - "443"
+        depends_on:
+            - nginx
+            - db
+            - elasticsearch
+        links:
+            - db
+            - elasticsearch
+        working_dir: /var/www/html
+        volumes:
+            - /var/www/html:/var/www/html
+            - ./apache/000-default.conf:/etc/apache2/sites-available/000-default.conf
+
+    php72:
+        build:
+            context: .
+            dockerfile: ./dockerfile_php72
+        container_name: php72
+        user: "1000:33"
+        expose:
+            - "80"
+            - "443"
+        depends_on:
+            - nginx
+            - db
+            - elasticsearch
+        links:
+            - db
+            - elasticsearch
+        working_dir: /var/www/html
+        volumes:
+            - /var/www/html:/var/www/html
+            - ./apache/000-default.conf:/etc/apache2/sites-available/000-default.conf
+
+    db:
+        image: mariadb
+        container_name: mariadb
+        ports:
+            - 3306:3306
+        environment:
+            MYSQL_ROOT_PASSWORD: admin
+        volumes:
+            - db_data:/var/lib/mysql
+            - /home/wbm/mariadb_bkps/mysql:/var/mariadb_bkps
+
+    elasticsearch:
+        image: elasticsearch:7.3.1
+        container_name: elasticsearch
+        ports:
+            - 9200:9200
+        environment:
+            - "discovery.type=single-node"
+        volumes:
+            - elastic_data:/usr/share/elasticsearch/data
+volumes:
+    db_data: {}
+    elastic_data: {}

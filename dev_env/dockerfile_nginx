@@ -1,0 +1,11 @@
+# The image to pull the base configuration from
+FROM nginx
+# Copy the custom default.conf from the WORKDIR (.) and overwrite the existing internal configuration in the NGINX container
+#COPY ./nginx/default.conf /etc/nginx/conf.d/default.conf
+
+ENV TZ 'Europe/Lisbon'
+RUN echo $TZ > /etc/timezone && \
+apt-get update && apt-get install -y --allow-unauthenticated tzdata && \
+rm /etc/localtime && \
+ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && \
+dpkg-reconfigure -f noninteractive tzdata
