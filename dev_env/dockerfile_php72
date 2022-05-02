@@ -20,7 +20,8 @@ ADD oracle/instantclient-sqlplus-linux.x64-12.2.0.1.0.tar.gz /usr/local
 
 RUN useradd -m -u 1000 winuser && usermod -g www-data winuser
 
-RUN apt-get update && apt-get -y install libzip-dev && apt-get -y install zip && apt-get -y install unzip \
+RUN apt-get update && apt-get -y install libzip-dev && apt-get -y install zip \
+  && apt-get -y install unzip && apt-get -y install vim && apt-get -y install sudo \
   && ln -s /usr/local/instantclient_12_2 /usr/local/instantclient \
   && ln -s /usr/local/instantclient/libclntsh.so.* /usr/local/instantclient/libclntsh.so \
   && ln -s /usr/local/instantclient/lib* /usr/lib \
