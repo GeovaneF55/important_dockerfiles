@@ -1,6 +1,6 @@
 FROM php:8.0.9-apache
 
-LABEL maintainer="Willy Bernardes Maciel <willy_maciel@live.com>"
+LABEL maintainer="Geovane Fonseca de Sousa Santos <geovanefss@gmail.com>"
 
 EXPOSE 80
 EXPOSE 443
@@ -46,7 +46,7 @@ RUN apt-get update && apt-get -y install libzip-dev && apt-get -y install zip &&
 
 WORKDIR /var/www/html
 
-#COPY ./apache/000-default.conf /etc/apache2/sites-available/000-default.conf
+COPY ./apache/000-default.conf /etc/apache2/sites-available/000-default.conf
 COPY ./apache/charset.conf /etc/apache2/conf-available/charset.conf
 COPY ./php/timezone.ini /usr/local/etc/php/conf.d/timezone.ini
 COPY ./php/vars-dev.ini /usr/local/etc/php/conf.d/vars.ini
